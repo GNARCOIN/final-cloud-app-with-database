@@ -94,14 +94,15 @@ class Enrollment(models.Model):
     mode = models.CharField(max_length=5, choices=COURSE_MODES, default=AUDIT)
     rating = models.FloatField(default=5.0)
 
-
 class Question(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, default="")
-    title = models.CharField(max_length=550, null=True)
-    text = models.CharField(max_length=550, null=True)
-    grade = models.FloatField(default=5.0)
-    choice_set = models.Choices
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    content = models.CharField(max_length=200)
+    grade = models.IntegerField(default=50)
 
+    def __str__(self):
+        return "Question: " + self.content
+
+    # <HINT> A sample model method to calculate if learner get the score of the question
     def is_get_score(self, selected_ids):
         all_answers = self.choice_set.filter(is_correct=True).count()
         selected_correct = self.choice_set.filter(is_correct=True, id__in=selected_ids).count()
